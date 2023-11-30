@@ -1,19 +1,19 @@
-# math
+# Pipeline
 
-[![Current version](https://img.shields.io/packagist/v/velkuns/math.svg?logo=composer)](https://packagist.org/packages/velkuns/math)
-[![Supported PHP version](https://img.shields.io/static/v1?logo=php&label=PHP&message=8.2%20-%208.3&color=777bb4)](https://packagist.org/packages/velkuns/math)
-![CI](https://github.com/velkuns/math/workflows/CI/badge.svg)
+[![Current version](https://img.shields.io/packagist/v/velkuns/pipeline.svg?logo=composer)](https://packagist.org/packages/velkuns/pipeline)
+[![Supported PHP version](https://img.shields.io/static/v1?logo=php&label=PHP&message=8.2%20-%208.3&color=777bb4)](https://packagist.org/packages/velkuns/pipeline)
+![CI](https://github.com/velkuns/pipeline/workflows/CI/badge.svg)
 
 ## Why?
 
-Some common code for Puzzle game like Codingame or Advent Of Code
+Pipeline object for functional programming
 
 ## Installation
 
 If you wish to install it in your project, require it via composer:
 
 ```bash
-composer require velkuns/math
+composer require velkuns/pipeline
 ```
 
 
