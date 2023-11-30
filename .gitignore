@@ -1,0 +1,16 @@
+#~ Composer
+composer.phar
+composer.lock
+/vendor/
+
+#~ Tests
+/build/*
+.phpunit.result.cache
+.phpunit.cache
+
+#~ Misc
+.idea
+
+#~ Overridden condigs
+phpstan.neon
+phpunit.xml
