@@ -14,11 +14,19 @@ namespace Velkuns\Pipeline;
 /**
  * Class PipelineEach
  *
- * @method self explode(string $glue)
+ * -- PipelineArray
  * @method self map(callable $callable)
  * @method self unique()
  * @method self intersect()
  * @method self current()
+ * @method self first()
+ * @method self last()
+ * @method self value(string|int $key)
+ * -- PipelineString
+ * @method self replace(string|array $pattern, string|array $replacement)
+ * @method self regex(string $function, string $pattern, string $replacement = '', mixed|null $args = null)
+ * @method self split(int $length)
+ * @method self explode(string $glue)
  */
 class PipelineEach
 {
@@ -47,9 +55,11 @@ class PipelineEach
      * Start new SubPipeline. So we need to advance on the current "each pipeline", then start new one with current
      * updated input.
      */
-    public function each(): PipelineEach
+    public function each(array $input): PipelineEach
     {
-        throw new \LogicException('Each inner existing each is currently not supported!');
+        return new PipelineEach($input);
+
+        //throw new \LogicException('Each inner existing each is currently not supported!');
     }
 
     public function end(): PipelineArray
@@ -60,7 +70,7 @@ class PipelineEach
             [$name, $args] = $this->pipeQueue->dequeue();
 
             foreach ($input as $index => $item) {
-                $input[$index] = $this->factory->new($input)->$name(...$args)->get();
+                $input[$index] = $this->factory->new($item)->$name(...$args)->get();
             }
         }
 

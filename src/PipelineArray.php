@@ -101,6 +101,38 @@ class PipelineArray
         return $this->factory->new(\current($this->input));
     }
 
+    public function first(): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
+    {
+        $input = $this->input;
+
+        return $this->factory->new(\reset($input));
+    }
+
+    public function last(): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
+    {
+        $input = $this->input;
+
+        return $this->factory->new(\end($input));
+    }
+
+    public function value(int|string $key): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
+    {
+        return $this->factory->new($this->input[$key] ?? null);
+    }
+
+    public function implode(string $separator = ''): PipelineString
+    {
+        /** @var string[]|int[]|float[] $input */
+        $input = $this->input;
+
+        return $this->factory->string(\implode($separator, $input));
+    }
+
+    public function replace(string|array $search, string|array $replacement): PipelineArray
+    {
+        return $this->factory->array(\str_replace($search, $replacement, $this->input));
+    }
+
     public function sort(): PipelineArray
     {
         $input = $this->input;

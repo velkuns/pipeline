@@ -35,17 +35,39 @@ trait PipelineTrait
      */
     public function retrieve(...$names): PipelineArray
     {
+        if (count($names) === 1) {
+            return $this->factory->new(Store::get(\reset($names)));
+        }
+
         return $this->factory->array(Store::getMany(...$names));
     }
 
+    public function flush(): self
+    {
+        Store::flush();
+
+        return $this;
+    }
+
+    /**
+     * @return T
+     */
     public function get(): mixed
     {
         return $this->input;
     }
 
-    public function debug(): self
+    public function debug(string $name = 'debug'): self
     {
-        \var_export($this->input);
+        echo "\n---------------------------- DEBUG -------------------------------\n";
+        echo \var_export(
+            [
+                    'type' => self::class,
+                    $name  => $this->input
+                ],
+            true
+        ) . "\n";
+        echo "\n---------------------------- ----- -------------------------------\n";
 
         return $this;
     }

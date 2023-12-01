@@ -18,11 +18,11 @@ class PipelineString
 
     private array $allowedMethods = [
         'haystack_first' => [
-            'trim',
-            'str_split',
+            'trim'  => 'trim',
+            'split' => 'str_split',
         ],
         'haystack_last' => [
-            'explode',
+            'explode' => 'explode',
         ]
     ];
 
@@ -33,25 +33,45 @@ class PipelineString
         $this->factory = $factory;
     }
 
+    public function regex(string $function, string $pattern, string $replacement = '', ...$args): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
+    {
+        $result = null;
+        switch ($function) {
+            case 'match':
+                \preg_match($pattern, $this->input, $result, ...$args);
+                break;
+            case 'matchAll':
+                \preg_match_all($pattern, $this->input, $result, ...$args);
+                break;
+            case 'replace':
+                $result = \preg_replace($pattern, $replacement, $this->input, ...$args);
+                break;
+            default:
+                throw new \LogicException('Unsupported regex function!');
+        }
+
+        return $this->factory->new($result);
+    }
+
     public function __call(string $name, array $args): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
     {
-        if (in_array($name, $this->allowedMethods['haystack_first'])) {
-            return $this->useHaystackFirst($name, $args);
+        if (isset($this->allowedMethods['haystack_first'][$name])) {
+            return $this->useHaystackFirst($this->allowedMethods['haystack_first'][$name], $args);
         }
 
-        if (in_array($name, $this->allowedMethods['haystack_last'])) {
-            return $this->useHaystackLast($name, $args);
+        if (isset($this->allowedMethods['haystack_last'][$name])) {
+            return $this->useHaystackLast($this->allowedMethods['haystack_first'][$name], $args);
         }
 
-        throw new \LogicException('function currently not supported!');
+        throw new \LogicException("function currently not supported (name: $name)!");
     }
 
     private function useHaystackFirst(string $name, array $args): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
     {
         //~ Put input as first argument.
-        array_unshift($args, $this->input);
+        \array_unshift($args, $this->input);
 
-        return $this->factory->new(call_user_func_array($name, $args));
+        return $this->factory->new(\call_user_func_array($name, $args));
     }
 
     private function useHaystackLast(string $name, array $args): PipelineInt|Pipeline|PipelineBool|PipelineArray|PipelineFloat|PipelineString
@@ -59,6 +79,6 @@ class PipelineString
         //~ Put input as first argument.
         $args[] = $this->input;
 
-        return $this->factory->new(call_user_func_array($name, $args));
+        return $this->factory->new(\call_user_func_array($name, $args));
     }
 }
