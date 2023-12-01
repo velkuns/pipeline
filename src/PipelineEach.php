@@ -55,11 +55,9 @@ class PipelineEach
      * Start new SubPipeline. So we need to advance on the current "each pipeline", then start new one with current
      * updated input.
      */
-    public function each(array $input): PipelineEach
+    public function each(): PipelineEach
     {
-        return new PipelineEach($input);
-
-        //throw new \LogicException('Each inner existing each is currently not supported!');
+        throw new \LogicException('Each inner existing each is currently not supported!');
     }
 
     public function end(): PipelineArray
